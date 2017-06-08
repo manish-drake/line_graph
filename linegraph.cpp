@@ -21,6 +21,21 @@ void LineGraph::setColor(const QColor &color)
     }
 }
 
+
+QColor LineGraph::refColor() const
+{
+    return m_refColor;
+}
+
+void LineGraph::setRefColor(const QColor &color)
+{
+    if(m_refColor != color){
+        m_refColor = color;
+        update();
+        emit refColorChanged(color);
+    }
+}
+
 QList<int> LineGraph::points()
 {
     return m_points;
@@ -32,6 +47,20 @@ void LineGraph::setPoints(QList<int> points)
         m_points = points;
         this->update();
         emit pointsChanged(points);
+    }
+}
+
+QList<int> LineGraph::refPoints()
+{
+    return m_refPoints;
+}
+
+void LineGraph::setRefPoints(QList<int> points)
+{
+    if(m_refPoints!= points){
+        m_refPoints = points;
+        this->update();
+        emit refPointsChanged(points);
     }
 }
 
@@ -55,10 +84,19 @@ void LineGraph::paint(QPainter *painter)
     QPen pen(m_color, 2);
     painter->setPen(pen);
     painter->setRenderHints(QPainter::Antialiasing, true);
+    std::vector<QPointF> points = getPointVecFromData(m_points);
+    std::vector<QPointF> refPoints = getPointVecFromData(m_refPoints);
+    painter->drawPolyline(points.data(), size());
+
+    QPen penRef(m_refColor, 1);
+    painter->setPen(penRef);
+    painter->drawPolyline(refPoints.data(), size());
+}
+std::vector<QPointF> LineGraph::getPointVecFromData(const QList<int> &data, const int seed){
     std::vector<QPointF> points;
-    auto x = 0;
-    for(auto p: m_points){
+    auto x = seed;
+    for(auto p: data){
         points.push_back(QPoint(x++, p));
     }
-    painter->drawPolyline(points.data(), size());
+    return points;
 }

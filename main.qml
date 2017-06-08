@@ -17,9 +17,11 @@ Window {
     }
     LineGraph{
 
-        color: "green"
+        color: "teal"
+        refColor: "black"
         width: 400; height: 256
         points: client.points
+        refPoints: client.refPoints
         size: 400
         anchors.centerIn: parent
     }

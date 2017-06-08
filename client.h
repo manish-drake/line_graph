@@ -8,6 +8,7 @@ class Client : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QList<int> points READ points WRITE setPoints NOTIFY pointsChanged)
+    Q_PROPERTY(QList<int> refPoints READ refPoints WRITE setRefPoints NOTIFY refPointsChanged)
 public:
     Q_INVOKABLE void refresh();
     explicit Client(QObject *parent = 0);
@@ -15,16 +16,20 @@ public:
     QList<int> points();
     void setPoints(QList<int> points);
 
+    QList<int> refPoints();
+    void setRefPoints(QList<int> points);
 protected:
     void timerEvent(QTimerEvent *event);
 signals:
     void pointsChanged(QList<int> points);
+    void refPointsChanged(QList<int> points);
 public slots:
 private:
     QList<int> m_points;
+    QList<int> m_refPoints;
     QList<int> getRandPointsList(){
         QList<int> list;
-        srand((unsigned)time(0));
+//        srand((unsigned)time(0));
         int random_integer;
         int lowest=0, highest=20, step = highest/2;
         int range=(highest-lowest)+1;
